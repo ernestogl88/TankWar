@@ -20,23 +20,31 @@ var Game = {
       this.background.draw();
       this.player.draw();
       this.player.bullets = this.player.bullets.filter(bullet=>{
-        console.log(`${bullet.x}, ${bullet.y}`)
-        bullet.y < 600-bullet.img.height/2 &&
+        return bullet.y < 600-bullet.img.height/2 &&
         bullet.y > 20 &&
         bullet.x < 1180 - bullet.img.width/2 &&
-        bullet.x > 180
+        bullet.x > 180;
+      });
+      this.enemies.forEach(tank => {
+        tank.draw();
+        tank.bullets = tank.bullets.filter(bullet=>{
+          return bullet.y < 600-bullet.img.height/2 &&
+          bullet.y > 20 &&
+          bullet.x < 1180 - bullet.img.width/2 &&
+          bullet.x > 180;
+        });
       });
     }, 1000/this.fps);
     
   },
   setCanvasDimension(){
-    // this.canvas.setAttribute("height", window.innerHeight);
+    // this.canvas.setAttribute("height", window.outerHeight);
     // this.canvas.setAttribute("width", window.innerWidth);
   },
   reset(){
     this.background = new Background(this.ctx);
-    this.player = new Tank(this.ctx);
-    this.enemies = [];
+    this.player = new Tank(this.ctx,1,1130,25);
+    this.enemies = [new Tank(this.ctx,0,185,25),new Tank(this.ctx,0,185,80),new Tank(this.ctx,0,185,150)];
     this.obstacles = [];
   },
   clear(){

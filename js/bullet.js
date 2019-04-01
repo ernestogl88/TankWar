@@ -5,7 +5,7 @@ class Bullet {
     this.y = y,
     this.ctx = ctx,
     this.img = new Image();
-    this.img.src = './img/bullet.png';
+    this.img.src = './img/bulletdown.png';
   }
   draw(){
     this.ctx.drawImage(this.img,this.x,this.y,this.img.width/2,this.img.height/2);
@@ -13,16 +13,20 @@ class Bullet {
   move(){
     switch (this.sense) {
       case 'u':
-      this.y -=5;
-      break;
+        this.y -= 5;
+        this.img.src = './img/bullet.png';
+        break;
       case 'd':
-      this.y += 5;
-      break;
+        this.y += 5;
+        this.img.src = './img/bulletdown.png';
+        break;
       case 'l':
-      this.x -= 5;
-      break;
+        this.x -= 5;
+        this.img.src = './img/bulletleft.png';
+        break;
       case 'r':
-      this.x += 5;
+        this.x += 5;
+        this.img.src = './img/bulletright.png';
     }
   }
   drawShoot(){
