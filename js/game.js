@@ -24,7 +24,7 @@ var Game = {
       if (this.player.bullets.length != 0) {
         this.player.bullets = this.clearBullets(this.player.bullets);
         this.player.bullets = this.player.bullets.filter(bullet=>{
-          if (this.checkBulletsCollisions(bullet)) return bullet;
+          if (!this.checkBulletsCollisions(bullet)) return bullet;
         });
       }
       this.checkPlayerCollisions(this.player);
@@ -120,12 +120,14 @@ var Game = {
   },
 
   checkBulletsCollisions(bullet) {
+    var control = this.obstacles.length;
     if (this.obstacles.length === 0) return false;
     else {
         this.obstacles = this.obstacles.filter(obstacle => {
           if (!this.checkCollision(bullet, obstacle)) return obstacle;
         });
-        return true;
+        
     }
+    if(this.obstacles.length<control) return true;
   }
 }
