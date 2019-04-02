@@ -13,19 +13,19 @@ class Bullet {
   move(){
     switch (this.sense) {
       case 'u':
-        this.y -= 5;
+        this.y -= 7;
         this.img.src = './img/bullet.png';
         break;
       case 'd':
-        this.y += 5;
+        this.y += 7;
         this.img.src = './img/bulletdown.png';
         break;
       case 'l':
-        this.x -= 5;
+        this.x -= 7;
         this.img.src = './img/bulletleft.png';
         break;
       case 'r':
-        this.x += 5;
+        this.x += 7;
         this.img.src = './img/bulletright.png';
     }
   }
