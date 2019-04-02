@@ -8,14 +8,13 @@ class Player extends Tank {
     this.power = 2 
   }
   setListeners() {
-    console.log("Tecla pulsada")
     document.onkeydown = function (e) {
       switch (e.keyCode) {
         case 38:
           this.img.src = `./img/${this.color}tankup.png`;
-          if (this.y === 20) {
+          if (this.y < 25) {
             this.sense = 'u';
-            this.y;
+            this.y-2;
           }
           else {
             this.sense = 'u';
@@ -24,7 +23,7 @@ class Player extends Tank {
           break;
         case 40:
           this.img.src = `./img/${this.color}tank.png`;
-          if (this.y > 600 - this.img.height / 2) {
+          if (this.y > 595 - this.img.height / 2) {
             this.sense = 'd';
             this.y - 2;
           }
@@ -35,9 +34,9 @@ class Player extends Tank {
           break;
         case 37:
           this.img.src = `./img/${this.color}tankleft.png`;
-          if (this.x === 180) {
+          if (this.x < 185) {
             this.sense = 'l';
-            this.x;
+            this.x+2;
           }
           else {
             this.sense = 'l';

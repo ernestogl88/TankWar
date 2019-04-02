@@ -14,10 +14,12 @@ class Tank {
   }
   draw() {
     this.ctx.drawImage(this.img, this.x, this.y, this.img.width / 2, this.img.height / 2);
-    this.bullets.forEach(bullet => {
-      bullet.move();
-      bullet.draw();
-    });
+    if(this.bullets.length != 0){
+      this.bullets.forEach(bullet => {
+        bullet.move();
+        bullet.draw();
+      });
+    }
   }
 
   shoot() {
@@ -48,31 +50,36 @@ class Tank {
   move(){
     switch (this.sense) {
       case 'u':
-        this.img.src = `./img/${this.color}tankup.png`;
-        if (this.y === 20)  this.y;
+        if (this.y < 25)  {
+          this.y -2;
+          this.moveRandom(['l','r']);
+        }
         else this.y -= 5;
         break;
       case 'd':
-        this.img.src = `./img/${this.color}tank.png`;
-        if (this.y > 600 - this.img.height / 2) this.y - 2;
+        if (this.y > 595 - this.img.height / 2) {
+          this.y - 2;
+          this.moveRandom(['l','r']);
+        }
         else  this.y += 5;
         break;
       case 'l':
-        this.img.src = `./img/${this.color}tankleft.png`;
-        if (this.x === 180) this.x;
+        if (this.x < 185) {
+          this.x;
+          this.moveRandom(['u','d']);
+        }
         else this.x -= 5;
         break;
       case 'r':
-        this.img.src = `./img/${this.color}tankright.png`;
-        if (this.x > 1180 - this.img.width / 2) this.x - 2;
+        if (this.x > 1180 - this.img.width / 2) {
+          this.x - 2;
+          this.moveRandom(['u','d']);
+        }
         else this.x += 5;
         break;
-      // case 32:
-      //   this.shoot();
     }
   }
-  moveRandom() {
-    var senses = ['u','d','l','r'];
+  moveRandom(senses) {
     this.sense = senses[Math.floor(Math.random()*senses.length)];
     switch (this.sense) {
       case 'u':
