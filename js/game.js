@@ -43,8 +43,8 @@ var Game = {
   },
   reset(){
     this.background = new Background(this.ctx);
-    this.player = new Tank(this.ctx,1,1130,25);
-    this.enemies = [new Tank(this.ctx,0,185,25),new Tank(this.ctx,0,185,80),new Tank(this.ctx,0,185,150)];
+    this.player = new Player(this.ctx,1130,25);
+    this.enemies = [new Tank(this.ctx,185,25),new Tank(this.ctx,185,80),new Tank(this.ctx,185,150)];
     this.obstacles = [];
   },
   clear(){

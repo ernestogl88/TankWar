@@ -1,5 +1,5 @@
 class Tank {
-  constructor(ctx,type,x,y) {
+  constructor(ctx,x,y) {
     this.ctx = ctx,
     this.img = new Image(),
     this.color = 'green',
@@ -8,11 +8,9 @@ class Tank {
     this.sense = 'd',
     this.bullets = [],
     this.maxBullets = 3;
-    if (type === 1){
-      this.color = 'red';
-      this.setListeners();
-    };
     this.img.src = `./img/${this.color}tank.png`;
+    this.lifePoints = 4,
+    this.power = 2 
   }
   draw() {
     this.ctx.drawImage(this.img, this.x, this.y, this.img.width/2, this.img.height/2);
@@ -21,61 +19,7 @@ class Tank {
       bullet.draw();
     });
   }
-  setListeners() {
-    if (this.type === 1) {
-      document.onkeydown = function (e) {
-        switch (e.keyCode) {
-          case 38:
-            this.img.src = `./img/${this.color}tankup.png`;
-            if (this.y === 20) {
-              this.sense = 'u';
-              this.y;
-            }
-            else {
-              this.sense = 'u';
-              this.y -= 5;
-            }
-            break;
-          case 40:
-            this.img.src = `./img/${this.color}tank.png`;
-            if (this.y > 600 - this.img.height / 2) {
-              this.sense = 'd';
-              this.y - 2;
-            }
-            else {
-              this.sense = 'd';
-              this.y += 5;
-            }
-            break;
-          case 37:
-            this.img.src = `./img/${this.color}tankleft.png`;
-            if (this.x === 180) {
-              this.sense = 'l';
-              this.x;
-            }
-            else {
-              this.sense = 'l';
-              this.x -= 5;
-            }
-            break;
-          case 39:
-            this.img.src = `./img/${this.color}tankright.png`;
-            if (this.x > 1180 - this.img.width / 2) {
-              this.sense = 'r';
-              this.x - 2;
-            }
-            else {
-              this.sense = 'r';
-              this.x += 5;
-            }
-            break;
-          case 32:
-            this.shoot();
-        }
-      }.bind(this);
-    }
-
-  }
+ 
   shoot() {
     switch (this.sense) {
       case 'u':
@@ -102,8 +46,6 @@ class Tank {
     }
   }
   moveRandom(){
-    if (this.type === 0){
-
-    }
+    
   }
 }
