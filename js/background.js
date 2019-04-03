@@ -5,6 +5,6 @@ class Background {
     this.img.src = './img/bigbg.png';
   }
   draw(){
-    this.ctx.drawImage(this.img,180,20,this.img.width,580);
+    this.ctx.drawImage(this.img,100,20,this.img.width,580);
   }
 }

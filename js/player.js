@@ -4,7 +4,7 @@ class Player extends Tank {
     this.setListeners();
     this.color = 'red',
     this.img.src = `./img/${this.color}tank.png`;
-    this.lifePoints = 1,
+    this.lifePoints = 5,
     this.power = 2 
   }
   setListeners() {
@@ -34,7 +34,7 @@ class Player extends Tank {
           break;
         case 37:
           this.img.src = `./img/${this.color}tankleft.png`;
-          if (this.x < 185) {
+          if (this.x < 105) {
             this.sense = 'l';
             this.x+2;
           }
@@ -45,7 +45,7 @@ class Player extends Tank {
           break;
         case 39:
           this.img.src = `./img/${this.color}tankright.png`;
-          if (this.x > 1180 - this.img.width / 2) {
+          if (this.x > 1100 - this.img.width / 2) {
             this.sense = 'r';
             this.x - 2;
           }

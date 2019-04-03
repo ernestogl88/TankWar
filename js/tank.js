@@ -54,28 +54,28 @@ class Tank {
           this.y - 2;
           this.moveRandom(['l', 'r']);
         }
-        else this.y -= 5;
+        else this.y -= 2;
         break;
       case 'd':
         if (this.y > 595 - this.img.height / 2) {
           this.y - 2;
           this.moveRandom(['l', 'r']);
         }
-        else this.y += 5;
+        else this.y += 2;
         break;
       case 'l':
-        if (this.x < 185) {
+        if (this.x < 105) {
           this.x;
           this.moveRandom(['u', 'd']);
         }
-        else this.x -= 5;
+        else this.x -= 2;
         break;
       case 'r':
-        if (this.x > 1180 - this.img.width / 2) {
+        if (this.x > 1100 - this.img.width / 2) {
           this.x - 2;
           this.moveRandom(['u', 'd']);
         }
-        else this.x += 5;
+        else this.x += 2;
         break;
     }
   }

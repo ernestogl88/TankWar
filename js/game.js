@@ -6,6 +6,7 @@ var Game = {
   enemies: [],
   obstacles: [],
   counter: 0,
+  level: 1,
   init(canvasId) {
     this.canvas = document.querySelector(canvasId);
     this.canvas.setAttribute("height", window.innerHeight);
@@ -20,11 +21,14 @@ var Game = {
       this.counter++;
       this.clearBoard();
       this.background.draw();
+      this.goal.draw();
+      this.scoreBoard.draw(this.player.lifePoints);
       this.player.draw();
       if (this.player.bullets.length != 0) {
         this.player.bullets = this.clearBullets(this.player.bullets);
         this.player.bullets = this.player.bullets.filter(bullet => {
-          if (!this.checkBulletsObstacle(bullet)) return bullet;
+          if (!this.checkBulletObstacle(bullet) &&
+              !this.checkBulletEnemies(bullet)) return bullet;
 
         });
       }
@@ -33,11 +37,12 @@ var Game = {
         this.checkEnemiesCollisions(tank);
         tank.draw();
         tank.move();
-        if (this.counter % 60 == 0) tank.moveRandom(['u', 'd', 'l', 'r']);
-        if (this.counter % 90 == 0) tank.shoot();
+        if (this.counter % 90 == 0) tank.moveRandom(['u', 'd', 'l', 'r']);
+        if (this.counter % 120 == 0) tank.shoot();
         tank.bullets = this.clearBullets(tank.bullets);
         tank.bullets = tank.bullets.filter(bullet => {
-          if (!this.checkBulletsObstacle(bullet)) return bullet;
+          if (!this.checkBulletObstacle(bullet) &&
+              !this.checkBulletPlayer(bullet)) return bullet;
 
         });
       });
@@ -50,10 +55,33 @@ var Game = {
     // this.canvas.setAttribute("width", window.innerWidth);
   },
   reset() {
-    this.background = new Background(this.ctx);
-    this.player = new Player(this.ctx, 1130, 25);
-    this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
-    this.obstacles = [new Obstacle(this.ctx, 600, 100), new Obstacle(this.ctx, 400, 250), new Obstacle(this.ctx, 400, 400)];
+    if (this.level === 0) {
+      this.background = new Background(this.ctx);
+      this.player = new Player(this.ctx, 1050, 25);
+      this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
+      this.generateDiagonalObstacles(9,170,70);
+      this.generateDiagonalObstacles(9,470,70);
+      this.generateDiagonalObstacles(5,770,70);
+      this.generateDiagonalObstacles(4,170,320);
+      this.goal = new Cross(105, 540, this.ctx);
+      this.scoreBoard = new Scoreboard(1100, 25, this.ctx);
+    }
+    if (this.level === 1){
+      this.background = new Background(this.ctx);
+      this.player = new Player(this.ctx, 1050, 25);
+      this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
+      this.generateHorizontalObstacles(17,170,80);
+      this.generateHorizontalObstacles(17,170,210);
+      this.generateHorizontalObstacles(17,170,340);
+      this.generateHorizontalObstacles(17,170,470);
+      this.generateVerticalObstacles(7,300,135);
+      this.generateVerticalObstacles(7,800,135);
+      this.generateVerticalObstacles(7,550,135);
+      this.goal = new Cross(105, 540, this.ctx);
+      this.scoreBoard = new Scoreboard(1100, 25, this.ctx);
+    }
+
+
   },
   clearBoard() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -62,15 +90,15 @@ var Game = {
     return bullets = bullets.filter(bullet => {
       return bullet.y < 600 - bullet.img.height / 2 &&
         bullet.y > 20 &&
-        bullet.x < 1180 - bullet.img.width / 2 &&
-        bullet.x > 180;
+        bullet.x < 1100 - bullet.img.width / 2 &&
+        bullet.x > 100;
     });
   },
-  checkCollision(object1, object2) {
-    if (object2.x < object1.x + object1.img.width / 2 &&
-      object1.x < object2.x + object2.img.width / 2 &&
-      object2.y < object1.y + object1.img.height / 2 &&
-      object1.y < object2.y + object2.img.height / 2) return true;
+  checkCollision(object1, object2,gap=0) {
+    if (object2.x-gap < object1.x + object1.img.width / 2 &&
+      object1.x < object2.x-gap + object2.img.width / 2-gap &&
+      object2.y+gap*4 < object1.y + object1.img.height / 2 &&
+      object1.y < object2.y+gap*4 + object2.img.height / 2+gap*4) return true;
     else return false;
   },
   checkPlayerCollisions(player) {
@@ -118,6 +146,9 @@ var Game = {
         }
       }
     });
+    if (this.checkCollision(player,this.goal,8)){
+      this.clearLevel();
+    }
   },
   checkEnemiesCollisions(tank) {
       this.obstacles.forEach(obstacle => {
@@ -189,7 +220,7 @@ var Game = {
       }
   },
 
-  checkBulletsObstacle(bullet) {
+checkBulletObstacle(bullet) {
     var control = this.obstacles.length;
     if (this.obstacles.length === 0) return false;
     else {
@@ -198,13 +229,45 @@ var Game = {
       });
     }
     if (this.obstacles.length < control) return true;
-
-    // if(this.checkCollision(bullet,this.player)){
-    //   this.player.getHit(bullet.power);
-    //   if (this.player.lifePoints <= 0) this.gameOver();
-    // }
+  },
+  checkBulletPlayer(bullet){
+    if (this.checkCollision(bullet,this.player)){
+      this.player.getHit();
+      return true;
+    }
+    else return false;
+  },
+  checkBulletEnemies(bullet){
+    var control = this.enemies.length;
+    if (this.enemies.length === 0) return false;
+    else {
+      this.enemies = this.enemies.filter(enemie => {
+        if (!this.checkCollision(bullet, enemie)) return enemie;
+      });
+    }
+    if (this.enemies.length < control) return true;
   },
   gameOver(){
     clearInterval(this.intervalId);
-  }
+  },
+  clearLevel(){
+    this.level++;
+    clearInterval(this.intervalId);
+    //this.start();
+  },
+  generateDiagonalObstacles(number,x,y){
+    for (var i = 0; i<number;i++){
+      this.obstacles.push(new Obstacle(this.ctx, x+(50*i), y+(50*i)));
+    }
+  },
+  generateVerticalObstacles(number,x,y){
+    for (var i = 0; i<number;i++){
+      this.obstacles.push(new Obstacle(this.ctx, x, y+(50*i)));
+    }
+  },
+  generateHorizontalObstacles(number,x,y){
+    for (var i = 0; i<number;i++){
+      this.obstacles.push(new Obstacle(this.ctx, x+(50*i), y));
+    }
+  },
 }
