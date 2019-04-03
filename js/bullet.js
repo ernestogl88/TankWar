@@ -31,9 +31,7 @@ class Bullet {
   }
   drawShoot(){
     var img = new Image();
-    img.src = './img/shot.png';
-    this.ctx.drawImage(img,this.x+this.img.width/4,this.y, img.width/2,img.height/2);
-    img.src = './img/shot2.png';
+    img.src = './img/shot.gif';
     this.ctx.drawImage(img,this.x+this.img.width/4,this.y, img.width/2,img.height/2);
   }
 }

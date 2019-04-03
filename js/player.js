@@ -4,7 +4,7 @@ class Player extends Tank {
     this.setListeners();
     this.color = 'red',
     this.img.src = `./img/${this.color}tank.png`;
-    this.lifePoints = 4,
+    this.lifePoints = 1,
     this.power = 2 
   }
   setListeners() {

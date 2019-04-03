@@ -5,9 +5,12 @@ class Obstacle {
     this.ctx = ctx,
     this.img = new Image();
     this.img.src = './img/obstacle.png',
-    this.resistance = 2
+    this.resistance = 6
   }
   draw(){
     this.ctx.drawImage(this.img,this.x,this.y,this.img.width/2,this.img.height/2);
+  }
+  getHit(){
+    this.resistance -= 1*power;
   }
 }

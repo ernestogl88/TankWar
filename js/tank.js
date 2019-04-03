@@ -1,20 +1,20 @@
 class Tank {
-  constructor(ctx,x,y) {
+  constructor(ctx, x, y) {
     this.ctx = ctx,
-    this.img = new Image(),
-    this.color = 'green',
+      this.img = new Image(),
+      this.color = 'green',
       this.x = x,
       this.y = y,
       this.sense = 'd',
       this.bullets = [],
       this.maxBullets = 3;
     this.img.src = `./img/${this.color}tank.png`;
-    this.lifePoints = 4,
-      this.power = 2
+    this.lifePoints = 2,
+      this.power = 1
   }
   draw() {
     this.ctx.drawImage(this.img, this.x, this.y, this.img.width / 2, this.img.height / 2);
-    if(this.bullets.length != 0){
+    if (this.bullets.length != 0) {
       this.bullets.forEach(bullet => {
         bullet.move();
         bullet.draw();
@@ -47,40 +47,40 @@ class Tank {
         }
     }
   }
-  move(){
+  move() {
     switch (this.sense) {
       case 'u':
-        if (this.y < 25)  {
-          this.y -2;
-          this.moveRandom(['l','r']);
+        if (this.y < 25) {
+          this.y - 2;
+          this.moveRandom(['l', 'r']);
         }
         else this.y -= 5;
         break;
       case 'd':
         if (this.y > 595 - this.img.height / 2) {
           this.y - 2;
-          this.moveRandom(['l','r']);
+          this.moveRandom(['l', 'r']);
         }
-        else  this.y += 5;
+        else this.y += 5;
         break;
       case 'l':
         if (this.x < 185) {
           this.x;
-          this.moveRandom(['u','d']);
+          this.moveRandom(['u', 'd']);
         }
         else this.x -= 5;
         break;
       case 'r':
         if (this.x > 1180 - this.img.width / 2) {
           this.x - 2;
-          this.moveRandom(['u','d']);
+          this.moveRandom(['u', 'd']);
         }
         else this.x += 5;
         break;
     }
   }
   moveRandom(senses) {
-    this.sense = senses[Math.floor(Math.random()*senses.length)];
+    this.sense = senses[Math.floor(Math.random() * senses.length)];
     switch (this.sense) {
       case 'u':
         this.img.src = `./img/${this.color}tankup.png`;
@@ -95,5 +95,8 @@ class Tank {
         this.img.src = `./img/${this.color}tankright.png`;
         break;
     }
+  }
+  getHit() {
+    this.lifePoints--;
   }
 }
