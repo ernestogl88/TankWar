@@ -56,7 +56,7 @@ var Game = {
   },
   reset() {
     if (this.level === 0) {
-      this.background = new Background(this.ctx);
+      this.background = new Background(this.ctx,img);
       this.player = new Player(this.ctx, 1050, 25);
       this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
       this.generateDiagonalObstacles(9,170,70);
@@ -64,10 +64,10 @@ var Game = {
       this.generateDiagonalObstacles(5,770,70);
       this.generateDiagonalObstacles(4,170,320);
       this.goal = new Cross(105, 540, this.ctx);
-      this.scoreBoard = new Scoreboard(1100, 25, this.ctx);
+      this.scoreBoard = new Scoreboard(1150, 25, this.ctx);
     }
     if (this.level === 1){
-      this.background = new Background(this.ctx);
+      this.background = new Background(this.ctx,img);
       this.player = new Player(this.ctx, 1050, 25);
       this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
       this.generateHorizontalObstacles(17,170,80);
@@ -78,7 +78,7 @@ var Game = {
       this.generateVerticalObstacles(7,800,135);
       this.generateVerticalObstacles(7,550,135);
       this.goal = new Cross(370, 285, this.ctx);
-      this.scoreBoard = new Scoreboard(1100, 25, this.ctx);
+      this.scoreBoard = new Scoreboard(1150, 25, this.ctx);
     }
 
 
@@ -118,6 +118,7 @@ var Game = {
   checkBulletPlayer(bullet){
     if (this.checkCollision(bullet,this.player)){
       this.player.getHit();
+      if (this.player.lifePoints <=0) this.gameOver();
       return true;
     }
     else return false;
@@ -138,11 +139,14 @@ var Game = {
   },
   gameOver(){
     clearInterval(this.intervalId);
+    document.querySelector('#game').style.display ='none';
+    document.querySelector('#init').style.display ='block';
+    document.querySelector('#myModal').style.display ='block';
   },
   clearLevel(){
     this.level++;
     clearInterval(this.intervalId);
-    //this.start();
+    this.start();
   },
   generateDiagonalObstacles(number,x,y){
     for (var i = 0; i<number;i++){

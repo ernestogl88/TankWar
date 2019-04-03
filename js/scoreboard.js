@@ -14,7 +14,7 @@ class Scoreboard {
       gap = i*25+25;
       this.ctx.drawImage(this.img,this.x+(25*i),this.y,this.img.width,this.img.height);
     }
-      for (var i =0 ; i<5-lifePoints;i++){
+      for (var i =0 ; i<2-lifePoints;i++){
         this.ctx.drawImage(this.img2,this.x+(gap+25*i),this.y,this.img.width,this.img.height);
       }
     

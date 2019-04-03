@@ -98,8 +98,6 @@ class Tank {
   }
   getHit() {
     this.lifePoints--;
-    if (this.lifePoints === 2) this.img.src='./img/explosion1.png';
-    if (this.lifePoints === 1) this.img.src='./img/explosion2.png';
   }
   checkEnemiesCollisions(obstacles, enemies, player) {
     obstacles.forEach(obstacle => {
