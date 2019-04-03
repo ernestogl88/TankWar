@@ -6,7 +6,7 @@ var Game = {
   enemies: [],
   obstacles: [],
   counter: 0,
-  level: 1,
+  level: 0,
   init(canvasId) {
     this.canvas = document.querySelector(canvasId);
     this.canvas.setAttribute("height", window.innerHeight);
@@ -27,14 +27,14 @@ var Game = {
       if (this.player.bullets.length != 0) {
         this.player.bullets = this.clearBullets(this.player.bullets);
         this.player.bullets = this.player.bullets.filter(bullet => {
-          if (!this.checkBulletObstacle(bullet) &&
-              !this.checkBulletEnemies(bullet)) return bullet;
-
+        if (!this.checkBulletObstacle(bullet) &&
+            !this.checkBulletEnemies(bullet)) return bullet;
         });
       }
-      this.checkPlayerCollisions(this.player);
+      this.player.checkPlayerCollisions(this.obstacles,this.enemies);
+      if (this.checkCollision(this.player,this.goal))this.clearLevel();
       this.enemies.forEach(tank => {
-        this.checkEnemiesCollisions(tank);
+        tank.checkEnemiesCollisions(this.obstacles,this.enemies,this.player);
         tank.draw();
         tank.move();
         if (this.counter % 90 == 0) tank.moveRandom(['u', 'd', 'l', 'r']);
@@ -77,11 +77,18 @@ var Game = {
       this.generateVerticalObstacles(7,300,135);
       this.generateVerticalObstacles(7,800,135);
       this.generateVerticalObstacles(7,550,135);
-      this.goal = new Cross(105, 540, this.ctx);
+      this.goal = new Cross(370, 285, this.ctx);
       this.scoreBoard = new Scoreboard(1100, 25, this.ctx);
     }
 
 
+  },
+  checkCollision(object1, object2) {
+    if (object2.x < object1.x + object1.img.width / 2 &&
+      object1.x < object2.x + object2.img.width / 2 &&
+      object2.y < object1.y + object1.img.height / 2 &&
+      object1.y < object2.y + object2.img.height / 2) return true;
+    else return false;
   },
   clearBoard() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -94,138 +101,16 @@ var Game = {
         bullet.x > 100;
     });
   },
-  checkCollision(object1, object2,gap=0) {
-    if (object2.x-gap < object1.x + object1.img.width / 2 &&
-      object1.x < object2.x-gap + object2.img.width / 2-gap &&
-      object2.y+gap*4 < object1.y + object1.img.height / 2 &&
-      object1.y < object2.y+gap*4 + object2.img.height / 2+gap*4) return true;
-    else return false;
-  },
-  checkPlayerCollisions(player) {
-    this.obstacles.forEach(obstacle => {
-      if (this.checkCollision(player, obstacle)) {
-        switch (player.sense) {
-          case 'u':
-            player.y = obstacle.y + obstacle.img.height / 2;
-            break;
-          case 'd':
-            player.y = obstacle.y - player.img.height / 2;
-            break;
-          case 'l':
-            player.x = obstacle.x + obstacle.img.width / 2;
-            break;
-          case 'r':
-            player.x = obstacle.x - player.img.width / 2;
-            break;
-        }
-      }
-    });
-    this.enemies.forEach(enemie => {
-      if (this.checkCollision(player, enemie)) {
-        switch (player.sense) {
-          case 'u':
-            player.y = enemie.y + enemie.img.height / 2;
-            enemie.moveRandom(['l,r']);
-            enemie.move();
-            break;
-          case 'd':
-            player.y = enemie.y - player.img.height / 2;
-            enemie.moveRandom(['l,r']);
-            enemie.move();
-            break;
-          case 'l':
-            player.x = enemie.x + enemie.img.width / 2;
-            enemie.moveRandom(['d,u']);
-            enemie.move();
-            break;
-          case 'r':
-            player.x = enemie.x - player.img.width / 2;
-            enemie.moveRandom(['d,u']);
-            enemie.move();
-            break;
-        }
-      }
-    });
-    if (this.checkCollision(player,this.goal,8)){
-      this.clearLevel();
-    }
-  },
-  checkEnemiesCollisions(tank) {
-      this.obstacles.forEach(obstacle => {
-        if (this.checkCollision(tank, obstacle)) {
-          switch (tank.sense) {
-            case 'u':
-              tank.y = obstacle.y + obstacle.img.height / 2;
-              tank.moveRandom(['l', 'r']);
-              break;
-            case 'd':
-              tank.y = obstacle.y - tank.img.height / 2;
-              tank.moveRandom(['l', 'r']);
-              break;
-            case 'l':
-              tank.x = obstacle.x + obstacle.img.width / 2;
-              tank.moveRandom(['u', 'd']);
-              break;
-            case 'r':
-              tank.x = obstacle.x - tank.img.width / 2;
-              tank.moveRandom(['u', 'd']);
-              break;
-          }
-        }
-      });
-      var tempEnemies = this.enemies.filter(enemie=>{
-        if(enemie != tank) return enemie;
-      });
-      tempEnemies.forEach(enemie => {
-        if (this.checkCollision(tank, enemie)) {
-          switch (tank.sense) {
-            case 'u':
-              //tank.y = enemie.y + enemie.img.height / 2;
-              tank.moveRandom(['l', 'r']);
-              break;
-            case 'd':
-              //tank.y = enemie.y - tank.img.height / 2;
-              tank.moveRandom(['l', 'r']);
-              break;
-            case 'l':
-              //tank.x = enemie.x + enemie.img.width / 2;
-              tank.moveRandom(['u', 'd']);
-              break;
-            case 'r':
-              //tank.x = enemie.x - tank.img.width / 2;
-              tank.moveRandom(['u', 'd']);
-              break;
-          }
-        }
-      });
-      if (this.checkCollision(tank, this.player)) {
-        switch (tank.sense) {
-          case 'u':
-            //tank.y = enemie.y + enemie.img.height / 2;
-            tank.moveRandom(['l', 'r']);
-            break;
-          case 'd':
-            //tank.y = enemie.y - tank.img.height / 2;
-            tank.moveRandom(['l', 'r']);
-            break;
-          case 'l':
-            //tank.x = enemie.x + enemie.img.width / 2;
-            tank.moveRandom(['u', 'd']);
-            break;
-          case 'r':
-            //tank.x = enemie.x - tank.img.width / 2;
-            tank.moveRandom(['u', 'd']);
-            break;
-        }
-      }
-  },
-
-checkBulletObstacle(bullet) {
+ checkBulletObstacle(bullet) {
     var control = this.obstacles.length;
     if (this.obstacles.length === 0) return false;
     else {
       this.obstacles = this.obstacles.filter(obstacle => {
         if (!this.checkCollision(bullet, obstacle)) return obstacle;
+        if (this.checkCollision(bullet,obstacle)) {
+          obstacle.getHit();
+          if (obstacle.resistance >0) return obstacle;
+        }
       });
     }
     if (this.obstacles.length < control) return true;
@@ -243,6 +128,10 @@ checkBulletObstacle(bullet) {
     else {
       this.enemies = this.enemies.filter(enemie => {
         if (!this.checkCollision(bullet, enemie)) return enemie;
+        if (this.checkCollision(bullet,enemie)) {
+          enemie.getHit();
+          if (enemie.resistance >0) return enemie;
+        }
       });
     }
     if (this.enemies.length < control) return true;

@@ -9,7 +9,7 @@ class Tank {
       this.bullets = [],
       this.maxBullets = 3;
     this.img.src = `./img/${this.color}tank.png`;
-    this.lifePoints = 2,
+    this.lifePoints = 3,
       this.power = 1
   }
   draw() {
@@ -98,5 +98,75 @@ class Tank {
   }
   getHit() {
     this.lifePoints--;
+    if (this.lifePoints === 2) this.img.src='./img/explosion1.png';
+    if (this.lifePoints === 1) this.img.src='./img/explosion2.png';
+  }
+  checkEnemiesCollisions(obstacles, enemies, player) {
+    obstacles.forEach(obstacle => {
+      if (this.checkCollision(this, obstacle)) {
+        switch (this.sense) {
+          case 'u':
+            this.y = obstacle.y + obstacle.img.height / 2;
+            this.moveRandom(['l', 'r']);
+            break;
+          case 'd':
+            this.y = obstacle.y - this.img.height / 2;
+            this.moveRandom(['l', 'r']);
+            break;
+          case 'l':
+            this.x = obstacle.x + obstacle.img.width / 2;
+            this.moveRandom(['u', 'd']);
+            break;
+          case 'r':
+            this.x = obstacle.x - this.img.width / 2;
+            this.moveRandom(['u', 'd']);
+            break;
+        }
+      }
+    });
+    var tempEnemies = enemies.filter(enemie => {
+      if (enemie != this) return enemie;
+    });
+    tempEnemies.forEach(enemie => {
+      if (this.checkCollision(this, enemie)) {
+        switch (this.sense) {
+          case 'u':
+            this.moveRandom(['l', 'r']);
+            break;
+          case 'd':
+            this.moveRandom(['l', 'r']);
+            break;
+          case 'l':
+            this.moveRandom(['u', 'd']);
+            break;
+          case 'r':
+            this.moveRandom(['u', 'd']);
+            break;
+        }
+      }
+    });
+    if (this.checkCollision(this, player)) {
+      switch (this.sense) {
+        case 'u':
+          this.moveRandom(['l', 'r']);
+          break;
+        case 'd':
+          this.moveRandom(['l', 'r']);
+          break;
+        case 'l':
+          this.moveRandom(['u', 'd']);
+          break;
+        case 'r':
+          this.moveRandom(['u', 'd']);
+          break;
+      }
+    }
+  }
+  checkCollision(object1, object2) {
+    if (object2.x < object1.x + object1.img.width / 2 &&
+      object1.x < object2.x + object2.img.width / 2 &&
+      object2.y < object1.y + object1.img.height / 2 &&
+      object1.y < object2.y + object2.img.height / 2) return true;
+    else return false;
   }
 }

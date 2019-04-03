@@ -28,10 +28,5 @@ class Bullet {
         this.x += 7;
         this.img.src = './img/bulletright.png';
     }
-  }
-  drawShoot(){
-    var img = new Image();
-    img.src = './img/shot.gif';
-    this.ctx.drawImage(img,this.x+this.img.width/4,this.y, img.width/2,img.height/2);
-  }
+  }  
 }
