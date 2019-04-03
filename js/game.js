@@ -139,8 +139,6 @@ var Game = {
   },
   gameOver(){
     clearInterval(this.intervalId);
-    document.querySelector('#game').style.display ='none';
-    document.querySelector('#init').style.display ='block';
     document.querySelector('#myModal').style.display ='block';
   },
   clearLevel(){
