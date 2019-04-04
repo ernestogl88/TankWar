@@ -1,9 +1,10 @@
 class Background {
-  constructor(ctx,img){
+  constructor(ctx){
     this.ctx = ctx,
     this.img = new Image(),
     this.img.src = './img/bigbg.png';
-    this.img2 = img
+    this.img2 = new Image();
+    this.img2.src = './img/frame.jpg'
     }
   draw(){
     this.ctx.drawImage(this.img2,0,0,1380 ,650);

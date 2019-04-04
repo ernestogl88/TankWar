@@ -5,6 +5,9 @@
 .modal {
   display: none;
   position: fixed;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   z-index: 1; 
   left: 0;
   top: 0;
@@ -16,22 +19,40 @@
 }
 
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; 
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
+#gameOver {
+  
+  width: 25%;
+  height: 35%;
+}
+
+#levelCleared {
+  width: 25%;
+  height: 45%;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button:hover{
+  width: 120px;
+  height: 118px;
   cursor: pointer;
+  padding-top: 0;
+}
+
+.button{
+  padding-top: 70px;
+  width: 100px;
+  height: 90px;
+  margin: 20px;
+  transition: width .5s, height .5s, padding-top .5s;
 }

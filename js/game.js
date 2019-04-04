@@ -56,7 +56,7 @@ var Game = {
   },
   reset() {
     if (this.level === 0) {
-      this.background = new Background(this.ctx,img);
+      this.background = new Background(this.ctx);
       this.player = new Player(this.ctx, 1050, 25);
       this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
       this.generateDiagonalObstacles(9,170,70);
@@ -67,7 +67,7 @@ var Game = {
       this.scoreBoard = new Scoreboard(1150, 25, this.ctx);
     }
     if (this.level === 1){
-      this.background = new Background(this.ctx,img);
+      this.background = new Background(this.ctx);
       this.player = new Player(this.ctx, 1050, 25);
       this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
       this.generateHorizontalObstacles(17,170,80);
@@ -139,12 +139,14 @@ var Game = {
   },
   gameOver(){
     clearInterval(this.intervalId);
-    document.querySelector('#myModal').style.display ='block';
+    document.querySelector('#levelCleared').style.display = 'none'
+    document.querySelector('#redArrow').style.display = 'none'
+    document.querySelector('#modal').style.display ='flex';
   },
   clearLevel(){
-    this.level++;
     clearInterval(this.intervalId);
-    this.start();
+    document.querySelector('#gameOver').style.display = 'none'
+    document.querySelector('#modal').style.display ='flex';
   },
   generateDiagonalObstacles(number,x,y){
     for (var i = 0; i<number;i++){
