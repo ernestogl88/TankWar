@@ -34,7 +34,9 @@ var Game = {
         });
       }
       this.player.checkPlayerCollisions(this.obstacles,this.enemies);
-      if (this.checkCollision(this.player,this.goal))this.clearLevel();
+      if (this.checkCollision(this.player,this.goal)){
+        this.level===1 ? this.win() :this.clearLevel();
+      }
       this.enemies.forEach(tank => {
         tank.checkEnemiesCollisions(this.obstacles,this.enemies,this.player);
         tank.draw();
@@ -60,25 +62,36 @@ var Game = {
     if (this.level === 0) {
       this.background = new Background(this.ctx);
       this.player = new Player(this.ctx, 1050, 25);
-      this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
-      this.generateDiagonalObstacles(9,170,70);
-      this.generateDiagonalObstacles(9,470,70);
-      this.generateDiagonalObstacles(5,770,70);
-      this.generateDiagonalObstacles(4,170,320);
+      for (var i = 0 ; i < 3 ; i++){
+        this.enemies.push(new Tank(this.ctx, 170+ (250*i), 550 ))
+      }
+      for (var i = 0 ; i < 3 ; i++){
+        this.enemies.push(new Tank(this.ctx, 170+ (250*i), 25 ))
+      }
+      for (var i =0;i<6;i++){
+        this.generateDottedObstacles(4,170+(150*i),90);
+      }
+      this.generateDottedObstacles(4,170,90);
       this.goal = new Cross(105, 540, this.ctx);
       this.scoreBoard = new Scoreboard(1150, 25, this.ctx);
     }
     if (this.level === 1){
+      this.kills=0;
+      this.obstacles = []
       this.background = new Background(this.ctx);
       this.player = new Player(this.ctx, 1050, 25);
-      this.enemies = [new Tank(this.ctx, 550, 200), new Tank(this.ctx, 300, 500), new Tank(this.ctx, 185, 150)];
-      this.generateHorizontalObstacles(17,170,80);
-      this.generateHorizontalObstacles(17,170,210);
-      this.generateHorizontalObstacles(17,170,340);
-      this.generateHorizontalObstacles(17,170,470);
-      this.generateVerticalObstacles(7,300,135);
-      this.generateVerticalObstacles(7,800,135);
-      this.generateVerticalObstacles(7,550,135);
+      for (var i = 0 ; i < 3 ; i++){
+        this.enemies.push(new Tank(this.ctx, 170+ (250*i), 550 ))
+      }
+      for (var i = 0 ; i < 3 ; i++){
+        this.enemies.push(new Tank(this.ctx, 170+ (250*i), 25 ))
+      }
+      for (var i = 0 ; i < 3 ; i++){
+        this.enemies.push(new Tank(this.ctx, 170+ (250*i), 300 ))
+      }
+      for (var i =0;i<4;i++){
+        this.generateHorizontalObstacles(12,170,80+(130*i));
+      }
       this.goal = new Cross(370, 285, this.ctx);
       this.scoreBoard = new Scoreboard(1150, 25, this.ctx);
     }
@@ -155,26 +168,27 @@ var Game = {
     document.querySelector('#gameOver').style.display = 'none';
     document.querySelector('#redArrow').style.display = 'block'
     document.querySelector('#modal').style.display ='flex';
+  },
+  generateDottedObstacles(number,x,y){
+    for (var i = 0; i<number;i++){
+      this.obstacles.push(new Obstacle(this.ctx, x, y+(110*i)));
+    }
+  },
+  generateHorizontalObstacles(number,x,y){
+    for (var i = 0; i<number;i++){
+      this.obstacles.push(new Obstacle(this.ctx, x+(70*i), y));
+    }
+  },
+  win(){
+    clearInterval(this.intervalId);
+    document.querySelector('#gameOver').style.display = 'none';
+    document.querySelector('#redArrow').style.display = 'none';
+    document.querySelector('#modal').style.display ='flex';
     this.sound.play();
     var myConfetti = confetti.create(this.canvas);
     myConfetti({
       particleCount: 400,
       spread: 160
     });
-  },
-  generateDiagonalObstacles(number,x,y){
-    for (var i = 0; i<number;i++){
-      this.obstacles.push(new Obstacle(this.ctx, x+(50*i), y+(50*i)));
-    }
-  },
-  generateVerticalObstacles(number,x,y){
-    for (var i = 0; i<number;i++){
-      this.obstacles.push(new Obstacle(this.ctx, x, y+(50*i)));
-    }
-  },
-  generateHorizontalObstacles(number,x,y){
-    for (var i = 0; i<number;i++){
-      this.obstacles.push(new Obstacle(this.ctx, x+(50*i), y));
-    }
-  },
+  }
 }
