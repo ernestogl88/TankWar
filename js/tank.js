@@ -9,8 +9,7 @@ class Tank {
       this.bullets = [],
       this.maxBullets = 3;
     this.img.src = `./img/${this.color}tank.png`;
-    this.lifePoints = 3,
-      this.power = 1
+    this.lifePoints = 3;
   }
   draw() {
     this.ctx.drawImage(this.img, this.x, this.y, this.img.width / 2, this.img.height / 2);

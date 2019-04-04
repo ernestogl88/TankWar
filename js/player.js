@@ -4,9 +4,8 @@ class Player extends Tank {
     this.setListeners();
     this.color = 'red',
       this.img.src = `./img/${this.color}tank.png`;
-    this.lifePoints = 2,
-      this.power = 2
-  }
+    this.lifePoints = 5
+    }
   setListeners() {
     document.onkeydown = function (e) {
       switch (e.keyCode) {

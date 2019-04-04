@@ -13,20 +13,21 @@
   <script src="js/obstacle.js"></script>
   <script src="js/game.js"></script>
   <script src="js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@0.2.0/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" href="style/style.css">
   <title>Tank War</title>
 </head>
 <body>
   <div id="init">
-    <button id="initbutton">Start</button>
+    <img id="initbutton" src="./img/start.png" alt="">
   </div>
   <div id="modal" class="modal">
 
     <!-- Modal content -->
     <div class="modal-content">
-      <img id="levelCleared" src="./img/PLAYAGAIN.png" alt="">
-      <img src="./img/GAMEOVER.png" alt="" id="gameOver">
+      <img id="levelCleared" src="./img/welldone.png" alt="">
+      <img src="./img/gameover.png  " alt="" id="gameOver">
       <div id="buttons">
         <img class="button" id="greenArrow" src="./img/greenArrow.png" alt="">
         <img class="button" id="blueArrow" src="./img/blueArrow.png" alt="">

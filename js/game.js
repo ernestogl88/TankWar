@@ -7,6 +7,8 @@ var Game = {
   obstacles: [],
   counter: 0,
   level: 0,
+  kills:0,
+  sound: new Audio('./sounds/Party-blower.mp3'),
   init(canvasId) {
     this.canvas = document.querySelector(canvasId);
     this.canvas.setAttribute("height", window.innerHeight);
@@ -22,7 +24,7 @@ var Game = {
       this.clearBoard();
       this.background.draw();
       this.goal.draw();
-      this.scoreBoard.draw(this.player.lifePoints);
+      this.scoreBoard.draw(this.player.lifePoints, this.kills);
       this.player.draw();
       if (this.player.bullets.length != 0) {
         this.player.bullets = this.clearBullets(this.player.bullets);
@@ -113,7 +115,10 @@ var Game = {
         }
       });
     }
-    if (this.obstacles.length < control) return true;
+    if (this.obstacles.length < control) {
+      this.obstaclesCleared += control - this.obstacles.length;
+      return true;
+    }
   },
   checkBulletPlayer(bullet){
     if (this.checkCollision(bullet,this.player)){
@@ -135,7 +140,9 @@ var Game = {
         }
       });
     }
-    if (this.enemies.length < control) return true;
+    if (this.enemies.length < control) {
+      this.kills += control - this.enemies.length;
+      return true;}
   },
   gameOver(){
     clearInterval(this.intervalId);
@@ -145,8 +152,15 @@ var Game = {
   },
   clearLevel(){
     clearInterval(this.intervalId);
-    document.querySelector('#gameOver').style.display = 'none'
+    document.querySelector('#gameOver').style.display = 'none';
+    document.querySelector('#redArrow').style.display = 'block'
     document.querySelector('#modal').style.display ='flex';
+    this.sound.play();
+    var myConfetti = confetti.create(this.canvas);
+    myConfetti({
+      particleCount: 400,
+      spread: 160
+    });
   },
   generateDiagonalObstacles(number,x,y){
     for (var i = 0; i<number;i++){
